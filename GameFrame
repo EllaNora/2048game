@@ -1,0 +1,358 @@
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+import java.util.Random;
+import java.awt.Color;
+import java.awt.Graphics;
+
+
+ public class GameFrame extends JFrame implements KeyListener
+ {
+	private JButton b[][] =  new JButton[4][4];
+	private int matrix[][] = new int[4][4];
+	private JPanel p1 = new JPanel();
+	private JPanel p2 = new JPanel();
+	private String st= new String("");
+	private int score=0;
+	private JLabel scoreLabel = new JLabel("");
+	int p,q;
+	Random randomGenerator = new Random();
+	public GameFrame()
+ {		super( "2048" );
+ 
+	
+	p1.setLayout(new GridLayout(4,4));
+	p2.setLayout(new BorderLayout());
+	
+	p2.add(scoreLabel,BorderLayout.NORTH);
+
+	p2.add(p1,BorderLayout.CENTER);
+	add(p2);
+	for(int i=0;i<4;i++)
+	 for(int j=0;j<4;j++)
+		{	matrix[i][j]=0;
+		
+		}
+	p = randomGenerator.nextInt(3);
+	q = randomGenerator.nextInt(3);
+	matrix[p][q]=2;
+	p = randomGenerator.nextInt(3);
+	q = randomGenerator.nextInt(3);
+	matrix[p][q]=2;
+	
+		
+ for(int i=0;i<4;i++)
+	for(int j=0;j<4;j++)
+		{	
+		
+			b[i][j]= new JButton(matrix[i][j]+"");
+			b[i][j].setFont(new Font("Serif",Font.BOLD,18));
+			setColor(b[i][j]);
+			p1.add(b[i][j]);
+			}
+			
+		b[0][0].addKeyListener(this);
+		
+
+ }
+ void newNo()
+ {	for(int i=0;i<16;i++)
+   {
+	int x = randomGenerator.nextInt(3);
+	int y = randomGenerator.nextInt(3);
+		
+			if(matrix[x][y]==0)
+				{matrix[x][y]=2;
+			return;}
+		
+	}
+	
+ }
+ void setColor(JButton b)
+ {
+	switch(Integer.parseInt(b.getText()))
+	{
+		case 0 : b.setBackground(new Color(0,0,0));
+				 b.setForeground(new Color(0,0,0));
+					return;
+					
+		case 2 : b.setBackground(new Color(234,212,227));
+					b.setForeground(new Color(0,0,0));
+							return;
+
+		case 4 : b.setBackground(new Color(225,191,213));
+					b.setForeground(new Color(0,0,0));
+							return;
+
+		case 8 : b.setBackground(new Color(212,165,196));
+					b.setForeground(new Color(0,0,0));
+							return;
+
+		case 16 : b.setBackground(new Color(200,138,179));
+					b.setForeground(new Color(0,0,0));
+							return;
+
+		case 32 : b.setBackground(new Color(191,119,166));
+					b.setForeground(new Color(0,0,0));
+							return;
+
+		case 64 : b.setBackground(new Color(175,84,144));
+					b.setForeground(new Color(0,0,0));
+							return;
+
+		case 128 : b.setBackground(new Color(162,58,127));
+					b.setForeground(new Color(0,0,0));
+							return;
+
+		case 256 : b.setBackground(new Color(137,3,91));
+					b.setForeground(new Color(0,0,0));
+					
+							return;
+
+		case 512 : b.setBackground(new Color(235,207,70));
+					b.setForeground(new Color(0,0,0));
+							return;
+
+		case 1024 : b.setBackground(new Color(242,225,140));
+					b.setForeground(new Color(0,0,0));
+							return;
+
+	
+	}
+ }
+ void setButton()
+ {	 
+	for(int i=0;i<4;i++)
+	for(int j=0;j<4;j++)
+		{	
+			b[i][j].setText(matrix[i][j]+"");
+			setColor(b[i][j]);
+			//add(b[i][j]);
+			}
+ 
+ }
+ void swap(int a, int b)
+ {
+	int temp = a;
+	a=b;
+	b=temp;
+ }
+ void reset()
+ {	for(int i=0;i<4;i++)
+	for(int j=0;j<4;j++)
+		{	matrix[i][j]=0;
+		
+		}
+	matrix[2][2]=512;
+	matrix[0][2]= 1024;
+	matrix[1][0]=2048;
+	matrix[1][1]= 2;
+	matrix[3][0]=2;
+	matrix[3][2]= 2;
+	matrix[2][3]=2;
+	matrix[0][3]= 2;
+	setButton();
+ }
+ public void keyPressed(KeyEvent event)
+	{
+		//System.out.println(event.getKeyCode());
+		/*if (event.getKeyCode()==40)
+		{		for(int i=0;i<4;i++)
+					for(int j=3;j>0;j--)
+						{	if(matrix[i][j]==0)
+								//swap(matrix[j][i],matrix[j-1][i]);
+								{
+									int temp = matrix[j][i];
+									matrix[j][i]=matrix[j-1][i];
+									matrix[j-1][i]=temp;
+								}
+						}
+						
+						//setButton();
+			
+		}*/
+		
+	}
+	public void keyReleased(KeyEvent event)
+	{
+		//System.out.println("Released "+event.getKeyCode());
+		System.out.println(event.getKeyCode());
+		if (event.getKeyCode()==40)
+		{		for(int k = 0;k<3;k++)
+				for(int i=0;i<4;i++)
+					for(int j=3;j>0;j--)
+						{	if(matrix[j][i]==0)
+								//swap(matrix[j][i],matrix[j-1][i]);
+								{
+									int temp = matrix[j][i];
+									matrix[j][i]=matrix[j-1][i];
+									matrix[j-1][i]=temp;
+								}
+						}
+
+				for(int i=0;i<4;i++)
+					for(int j=0;j<3;j++)
+						{	if(matrix[j][i]==matrix[j+1][i])
+								//swap(matrix[j][i],matrix[j-1][i]);
+								{
+									
+									matrix[j+1][i]=matrix[j][i]+matrix[j+1][i];
+									matrix[j][i]=0;
+									score = score+matrix[j+1][i];
+									scoreLabel.setText("Score : "+score);
+								}
+						}
+				for(int k = 0;k<3;k++)
+				for(int i=0;i<4;i++)
+					for(int j=3;j>0;j--)
+						{	if(matrix[j][i]==0)
+								//swap(matrix[j][i],matrix[j-1][i]);
+								{
+									int temp = matrix[j][i];
+									matrix[j][i]=matrix[j-1][i];
+									matrix[j-1][i]=temp;
+								}
+						}
+						newNo();
+						setButton();
+			
+		}
+		else if (event.getKeyCode()==37)
+		{		
+			for(int k = 0;k<3;k++)
+				for(int i=0;i<4;i++)
+					for(int j=0;j<3;j++)
+						{	if(matrix[i][j]==0)
+								{  //swap(matrix[i][j],matrix[i][j+1]);
+								
+									int temp = matrix[i][j];
+									matrix[i][j]=matrix[i][j+1];
+									matrix[i][j+1]=temp;
+								}
+						}
+					
+				for(int i=0;i<4;i++)
+					for(int j=3;j>0;j--)
+						{	if(matrix[i][j]==matrix[i][j-1])
+								//swap(matrix[j][i],matrix[j-1][i]);
+								{
+									
+									matrix[i][j-1]=matrix[i][j-1]+matrix[i][j];
+									matrix[i][j]=0;
+									score = score+matrix[i][j-1];
+									scoreLabel.setText("Score : "+score);
+								}
+						}
+						
+				for(int k = 0;k<3;k++)
+				for(int i=0;i<4;i++)
+					for(int j=0;j<3;j++)
+						{	if(matrix[i][j]==0)
+								{  //swap(matrix[i][j],matrix[i][j+1]);
+									int temp = matrix[i][j];
+									matrix[i][j]=matrix[i][j+1];
+									matrix[i][j+1]=temp;
+								}
+						}
+						newNo();
+
+						setButton();
+			
+		}
+		else if (event.getKeyCode()==38)
+		{		for(int k = 0;k<3;k++)
+				for(int i=0;i<4;i++)
+					for(int j=0;j<3;j++)
+						{	if(matrix[j][i]==0)
+								//swap(matrix[j+1][i],matrix[j-1][i]);
+								{
+									int temp = matrix[j][i];
+									matrix[j][i]=matrix[j+1][i];
+									matrix[j+1][i]=temp;
+								}
+						}
+					
+				for(int i=0;i<4;i++)
+					for(int j=3;j>0;j--)
+						{	if(matrix[j][i]==matrix[j-1][i])
+								//swap(matrix[j][i],matrix[j-1][i]);
+								{
+									
+									matrix[j-1][i]=matrix[j][i]+matrix[j-1][i];
+									matrix[j][i]=0;
+									score = score+matrix[j-1][i];
+									scoreLabel.setText("Score : "+score);
+								}
+						}
+				for(int k = 0;k<3;k++)
+				for(int i=0;i<4;i++)
+					for(int j=0;j<3;j++)
+						{	if(matrix[j][i]==0)
+								//swap(matrix[j+1][i],matrix[j-1][i]);
+								{
+									int temp = matrix[j][i];
+									matrix[j][i]=matrix[j+1][i];
+									matrix[j+1][i]=temp;
+								}
+						}
+						newNo();
+						setButton();
+			
+		}
+		else if (event.getKeyCode()==39)
+		{		
+			for(int k=0;k<3;k++)
+				for(int i=3;i>=0;i--)
+					for(int j=3;j>0;j--)
+						{	if(matrix[i][j]==0)
+								{  //swap(matrix[i][j],matrix[i][j+1]);
+									
+									int temp = matrix[i][j];
+									matrix[i][j]=matrix[i][j-1];
+									matrix[i][j-1]=temp;
+									
+								}
+						}
+				
+				for(int i=0;i<4;i++)
+					for(int j=3;j>0;j--)
+						{	if(matrix[i][j]==matrix[i][j-1])
+								//swap(matrix[j][i],matrix[j-1][i]);
+								{
+									
+									matrix[i][j]=matrix[i][j-1] + matrix[i][j];
+									matrix[i][j-1]=0;
+									score = score+matrix[i][j];
+									scoreLabel.setText("Score : "+score);
+								}
+						}
+				for(int k=0;k<3;k++)
+				for(int i=3;i>=0;i--)
+					for(int j=3;j>0;j--)
+						{	if(matrix[i][j]==0)
+								{  //swap(matrix[i][j],matrix[i][j+1]);
+								
+									int temp = matrix[i][j];
+									matrix[i][j]=matrix[i][j-1];
+									matrix[i][j-1]=temp;
+									
+								}
+						}
+						newNo();
+						setButton();
+			
+		}
+		
+		if (event.getKeyCode()==32)
+		{
+				reset();	
+		}
+		      
+	}
+	public void keyTyped(KeyEvent event)
+	{
+		
+		
+	}
+ 
+ }
